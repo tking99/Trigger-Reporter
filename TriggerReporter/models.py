@@ -389,6 +389,9 @@ class ReportData:
         self.array_data = [] 
 
 
+    def get_latest_date(self):
+        return max((array.date for array in self.array_data))
+    
     def __str__(self):
         return f'{self.heading}-{self.surveyor}-{self.mt_type}'
 

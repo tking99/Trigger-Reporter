@@ -161,8 +161,11 @@ class ReportDataProcessor:
             for master_array, array_var in report_var.array_vars.items():
                 for mt_type, data in array_var.vars.items():
                     on_off = data[0].get()
-                    date = data[1].get()
+                   
+                    #date = datetime.strptime(date,'%d.%m.%Y:%H:%M:%S')
                     if on_off:
+                        date = data[1].get()
+                        date = datetime.strptime(date,'%Y-%m-%d %H:%M:%S')
                         report_data = self.get_report_data(heading, surveyor, mt_type)
                         array = master_array.get_array(mt_type)
                         if array is not None:
