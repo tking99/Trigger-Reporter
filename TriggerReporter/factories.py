@@ -47,3 +47,12 @@ class ResultsTableFactory:
 
         return result_tables
             
+
+class MonitoringResultsTableFactory:
+    MONITORING_TABLES = (ConvergenceMonitoringResultsTable, DivergenceMonitoringResultsTable, RadialMonitoringResultsTable, \
+        VectorMonitoringResultsTable, Point3DMonitoringResultsTable)
+    @classmethod 
+    def get_monitoring_table(cls, mt_type):
+        for table in cls.MONITORING_TABLES:
+            if table.RESULTS_TYPE == mt_type:
+                return table 

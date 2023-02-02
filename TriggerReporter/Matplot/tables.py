@@ -4,16 +4,17 @@ import numpy as np
 from matplotlib.backends.backend_pdf import PdfPages
 import matplotlib.pyplot as plt
 
+from TriggerReporter.models import MonitoringTypes
+
 
 class MonitoringResultsTable:
     RESULTS_TYPE = ''
     COLUMN_HEADERS = ['Point ID', 'Date:Time', 'Convergence(mm)']
-    ARRAYS_PER_ROW = 1
+    ARRAYS_PER_ROW = 2
     ARRAYS_PER_PAGE = 4
     def __init__(self, report_data):
         self.report_data = report_data
         self.title_text = self.report_data.heading.site.name.title()
-        self.header_text = f'Surveyor: {self.report_data.surveyor.title()}'
         self.fig_border = 'black'
         self.report_date = datetime.strftime(report_data.get_latest_date().date(),'%d %B %Y')
 
@@ -43,8 +44,9 @@ class MonitoringResultsTable:
                     edgecolor=self.fig_border,
                     layout='constrained')
         plt.box(on=None)
-        plt.suptitle(f'{self.report_data.heading.site.name.title()} {self.report_data.heading.name.title()} {self.RESULTS_TYPE.title()}\n {self.report_date}')
-        plt.figtext(0.95, 0.05, self.header_text, horizontalalignment='right', size=6, weight='light')
+        plt.suptitle(f'{self.report_data.heading.site.name.title()} {self.report_data.heading.name.title()} {self.RESULTS_TYPE.title()}\n \
+            {self.report_date}     Surveyor: {self.report_data.surveyor.title()}')
+        #plt.figtext(0.95, 0.05, 'hello', horizontalalignment='right', size=6, weight='light')
 
     def create_table(self, array_data, index):
         array = array_data.array 
@@ -80,7 +82,6 @@ class MonitoringResultsTable:
                       loc='center',
                       cellColours=cell_colours)
 
-    
     def get_cell_colour(self, value, triggers):
         """returns the trigger color based on the value passed in, checks last trigger first"""
         for trig in reversed(triggers): 
@@ -95,29 +96,27 @@ class MonitoringResultsTable:
         
     
 class ConvergenceMonitoringResultsTable(MonitoringResultsTable):
-    RESULTS_TYPE = 'CONVERGENCE'
+    RESULTS_TYPE = MonitoringTypes.CONVERGENCE.value
     COLUMN_HEADERS = ['Point ID', 'Date:Time', 'Convergence(mm)']
-    ARRAYS_PER_ROW = 2
+    
 
 
 class DivergenceMonitoringResultsTable(MonitoringResultsTable):
-    RESULTS_TYPE = 'DIVERGENCE'
+    RESULTS_TYPE = MonitoringTypes.DIVERGENCE.value
     COLUMN_HEADERS = ['Point ID', 'Date:Time', 'Divergence(mm)']
-    ARRAYS_PER_ROW = 2
 
 
 class RadialMonitoringResultsTable(MonitoringResultsTable):
-    RESULTS_TYPE = 'RADIAL'
+    RESULTS_TYPE = MonitoringTypes.RADIAL.value
     COLUMN_HEADERS = ['Point ID', 'Date:Time', 'Radial(mm)']
-    ARRAYS_PER_ROW = 2
+
 
 class Point3DMonitoringResultsTable(MonitoringResultsTable):
-    RESULTS_TYPE = 'POINT 3D'
+    RESULTS_TYPE = MonitoringTypes.POINT3D.value
     COLUMN_HEADERS = ['Point ID', 'Date:Time', 'Delta E(mm)', 'Delta N(mm)', 'Delta H(mm)']
-    ARRAYS_PER_ROW = 2 
 
 
 class VectorMonitoringResultsTable(MonitoringResultsTable):
-    RESULTS_TYPE = 'Vector'
+    RESULTS_TYPE = MonitoringTypes.VECTOR.value
     COLUMN_HEADERS = ['Point ID', 'Date:Time', 'Vector(mm)']
-    ARRAYS_PER_ROW = 2 
+ 

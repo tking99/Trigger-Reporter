@@ -170,6 +170,10 @@ class ReportDataProcessor:
                         array = master_array.get_array(mt_type)
                         if array is not None:
                             report_data.array_data.append(ArrayData(array, date))
+        for k, v in self.report_datas.items():
+            for data in v:
+                print(report_data.mt_type)
+                print(report_data.array_data)
         return self.report_datas
                         
     def get_report_data(self, heading, surveyor, mt_type):

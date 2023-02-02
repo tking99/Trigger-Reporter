@@ -12,6 +12,7 @@ from tktimepicker import SpinTimePickerModern, constants
 from TriggerReporter.models import MonitoringTypes, ReportVar, ArrayVar
 from TriggerReporter.Matplot.tables import RadialMonitoringResultsTable, ConvergenceMonitoringResultsTable
 from TriggerReporter.processors import ReportDataProcessor
+from TriggerReporter.factories import MonitoringResultsTableFactory
 
 class SurveyMainDisplay(ttk.Frame):
     def __init__(self, container, project, *args, **kwargs):
@@ -40,13 +41,11 @@ class SurveyMainDisplay(ttk.Frame):
         self.bottom_frame.grid(column=0, row=1, padx=10, pady=10, sticky='NSEW')
         self.bottom_frame.columnconfigure(0, weight=1)
         ttk.Separator(self.bottom_frame, orient=tk.HORIZONTAL).grid(column=0, row=0, columnspan=10, sticky='ew')
-        
-        
+           
         self.button_frame = ttk.Frame(self.bottom_frame)
         self.button_frame.grid(column=1, row=1, sticky='NW', padx=10, pady=10)
         ttk.Button(self.button_frame, text='Print Reports', command=self.print_reports, padding=(10,5)).grid(
             column=0, row=0, padx=5, pady=5, sticky='NE')
-
 
     def print_reports(self):
         if self.vars:
@@ -54,11 +53,12 @@ class SurveyMainDisplay(ttk.Frame):
             report_datas = report_data_processor.process_report_data()
             for k, v in report_datas.items():
                 for report_data in v:
-                    table = ConvergenceMonitoringResultsTable(report_data)
-       
- 
-      
-        
+                    #print(report_data.array_data)
+                    #print(report_data.mt_type)
+                    table = MonitoringResultsTableFactory.get_monitoring_table(report_data.mt_type)
+                    if table:
+                        table(report_data)
+    
 class ArrayCanvas(tk.Canvas):
     def __init__(self, container, *args, **kwargs):
         super().__init__(container, *args, **kwargs)

@@ -405,9 +405,9 @@ class ArrayData:
         self.date = date 
 
     def __str__(self):
-        return self.array 
+        return self.array.name 
 
     def __repr__(self):
-        return self.array
+        return self.array.name
 
 
