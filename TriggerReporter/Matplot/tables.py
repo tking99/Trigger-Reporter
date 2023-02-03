@@ -10,11 +10,11 @@ from TriggerReporter.models import MonitoringTypes
 class MonitoringResultsTable:
     RESULTS_TYPE = ''
     COLUMN_HEADERS = ['Point ID', 'Date:Time', 'Convergence(mm)']
+    TRIGGER_HEADERS = ['Point ID', 'Green(mm)', 'Amber(mm)', 'Red(mm)']
     ARRAYS_PER_ROW = 2
     ARRAYS_PER_PAGE = 4
     def __init__(self, report_data):
         self.report_data = report_data
-        self.title_text = self.report_data.heading.site.name.title()
         self.fig_border = 'black'
         self.report_date = datetime.strftime(report_data.get_latest_date().date(),'%d %B %Y')
 
@@ -31,6 +31,20 @@ class MonitoringResultsTable:
                 self.create_table(array_data, index)
             self.plt_save_close()
 
+            # Create Trigger Table
+            self.plt_trigger_setup()
+            index = 0
+            for num, array_data in enumerate(self.report_data.array_data):
+                index += 1 
+                if num != 0 and num % self.ARRAYS_PER_PAGE == 0:
+                    #new page
+                    index = 1
+                    self.plt_save_close()
+                    self.plt_trigger_setup()      
+                self.create_trigger_table(array_data, index)
+            self.plt_save_close()
+
+
     def plt_save_close(self):
         plt.draw()
         fig = plt.gcf()
@@ -46,8 +60,16 @@ class MonitoringResultsTable:
         plt.box(on=None)
         plt.suptitle(f'{self.report_data.heading.site.name.title()} {self.report_data.heading.name.title()} {self.RESULTS_TYPE.title()}\n \
             {self.report_date}     Surveyor: {self.report_data.surveyor.title()}')
-        #plt.figtext(0.95, 0.05, 'hello', horizontalalignment='right', size=6, weight='light')
+       
+    def plt_trigger_setup(self):
+        plt.figure(linewidth=2,
+                    edgecolor=self.fig_border,
+                    layout='constrained')
+        plt.box(on=None)
+        plt.suptitle(f'{self.report_data.heading.site.name.title()} {self.report_data.heading.name.title()} {self.RESULTS_TYPE.title()} Triggers')
 
+
+    
     def create_table(self, array_data, index):
         array = array_data.array 
         axTable = plt.subplot(2,self.ARRAYS_PER_ROW, index, frame_on=False)
@@ -55,7 +77,7 @@ class MonitoringResultsTable:
         row_headers = array.get_monitoring_point_ids()
         
         #Table Styles
-        ccolors = plt.cm.BuPu(np.full(len(self.COLUMN_HEADERS), 0.1))
+        ccolors = ['lightcyan', 'lightcyan', 'lightcyan']
         rcolors = plt.cm.BuPu(np.full(len(row_headers), 0.1))
 
         cell_text = []
@@ -93,6 +115,38 @@ class MonitoringResultsTable:
                       loc='center',
                       cellColours=cell_colours)
 
+    
+    def create_trigger_table(self, array_data, index):
+        array = array_data.array 
+        axTable = plt.subplot(2,self.ARRAYS_PER_ROW, index, frame_on=False)
+        
+        row_headers = array.get_monitoring_point_ids()
+        
+        #Table Styles
+        ccolors = ['lightcyan', 'forestgreen', 'orange', 'red']
+        rcolors = plt.cm.BuPu(np.full(len(row_headers), 0.1))
+
+        cell_text = []
+      
+        for mp in array.monitoring_points:
+            cell_text.append([mp.point_id, mp.triggers[0].value, mp.triggers[1].value, mp.triggers[2].value])
+            
+        # check for overalisations
+        if array.overalisations:
+            for oval in array.overalisations:
+                cell_text.append([oval.CODE_TYPE, oval.triggers[0].value, oval.triggers[1].value, oval.triggers[2].value])
+               
+
+        axTable.set_title(f'Array {array.name.title()}', pad=10)
+        axTable.get_xaxis().set_visible(False)
+        axTable.get_yaxis().set_visible(False)
+        
+        axTable.table(cellText=cell_text,
+                      rowLoc='right',
+                      colColours=ccolors,
+                      colLabels=self.TRIGGER_HEADERS,
+                      loc='center')
+
     def get_cell_colour(self, value, triggers):
         """returns the trigger color based on the value passed in, checks last trigger first"""
         for trig in reversed(triggers): 
@@ -104,7 +158,8 @@ class MonitoringResultsTable:
                     return trig.color 
         return 'w'
 
-         
+    
+      
 class ConvergenceMonitoringResultsTable(MonitoringResultsTable):
     RESULTS_TYPE = MonitoringTypes.CONVERGENCE.value
     COLUMN_HEADERS = ['Point ID', 'Date:Time', 'Convergence(mm)']

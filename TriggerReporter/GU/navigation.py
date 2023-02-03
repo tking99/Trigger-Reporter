@@ -39,7 +39,8 @@ class MainNavbar(tk.Menu):
             tk.messagebox.showerror(title='Project Error',
                 message='Project Failed to Load')
         else:
-            self.controller.project = project 
+            self.controller.project = project
+            self.controller.load_survey_window() 
 
     def save_project(self):
         """Saves an existing project"""

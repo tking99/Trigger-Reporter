@@ -24,19 +24,7 @@ class SurveyMainDisplay(ttk.Frame):
         self.today_date_time = datetime.now()
         self.array_canvas = ArrayCanvas(self)
         self.array_canvas.grid(column=0, row=0, sticky='NSEW')
-    
-        #ttk.Label(self.info_frame, text='Date:').grid(column=0, row=0, padx=3, pady=3, sticky='NW')
-        #cal = DateEntry(self.info_frame, font='Arial 8', selectmode='day', year=self.today_date_time.year,
-        #    month=self.today_date_time.month, day=self.today_date_time.day)
-        #cal.grid(column=1, row=0, padx=3, pady=5, sticky='NW')
-        
-        #ttk.Label(self.info_frame, text='Time:').grid(column=0, row=1, padx=3, pady=3, sticky='NW')
-        #time_picker = SpinTimePickerModern(self.info_frame, orient=constants.HORIZONTAL)
-        #time_picker.grid(column=1, row=1, padx=3, pady=5, sticky='NW')
-        #time_picker.addHours24()	
-        #time_picker.addMinutes()	
-        #time_picker.addPeriod()	
-        
+  
         self.bottom_frame = ttk.Frame(self)
         self.bottom_frame.grid(column=0, row=1, padx=10, pady=10, sticky='NSEW')
         self.bottom_frame.columnconfigure(0, weight=1)
@@ -64,9 +52,9 @@ class SurveyMainDisplay(ttk.Frame):
                 self.print_report_unsuccess()
 
     
-    def print_report_success(self, processed_report_data):
+    def print_report_success(self, processed_report_data):     
         tk.messagebox.showinfo(
-            title='Successfully Printed Reports', message=processed_report_data)
+            title='Successfully Printed Reports')
 
     def print_report_unsuccess(self):
         tk.messagebox.showerror(title='Unsuccessfully Printed reports', 
