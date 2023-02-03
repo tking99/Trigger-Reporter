@@ -70,7 +70,14 @@ class MonitoringResultsTable:
                 #No monitoring data for that day
                 cell_text.append([mp.point_id, '-', '-'])
                 cell_colours.append(['grey',  'grey', 'grey'])
-      
+        # check for overalisations
+        if array.overalisations:
+            for oval in array.overalisations:
+                cell_text.append([oval.CODE_TYPE, 'date', 'test'])
+                colour = self.get_cell_colour(10, oval.triggers)
+                cell_colours.append([colour,  colour, colour])
+
+
         axTable.set_title(f'Array {array.name.title()}')
         axTable.get_xaxis().set_visible(False)
         axTable.get_yaxis().set_visible(False)
@@ -93,8 +100,7 @@ class MonitoringResultsTable:
                     return trig.color 
         return 'w'
 
-        
-    
+         
 class ConvergenceMonitoringResultsTable(MonitoringResultsTable):
     RESULTS_TYPE = MonitoringTypes.CONVERGENCE.value
     COLUMN_HEADERS = ['Point ID', 'Date:Time', 'Convergence(mm)']

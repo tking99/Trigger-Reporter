@@ -1,12 +1,12 @@
 from datetime import datetime
 
 from TriggerReporter.extractors import MonitoringPointCSVExtractor, AmbergMeasurementExtractor
-from TriggerReporter.models import MonitoringTypes, MonitoringPoint, MeasurementDistancePoint, Measurement3DPoint, Site, Heading, \
-     MasterArray, Array, Trigger, ReportData, ArrayData
+from TriggerReporter.models import *
 from TriggerReporter.factories import MeasurementPointFactory, ArrayFactory
 
 
 class MonitoringPointProcessor:
+    ALLOWED_OVERLISATIONS = (Overalisation1, Overalisation2)
     def __init__(self, project, extractor=None):
         self.project = project
         self.extractor = MonitoringPointCSVExtractor
@@ -29,7 +29,6 @@ class MonitoringPointProcessor:
         array_name = self.extractor.extract_convergence_array_name(data_line)
         mp_id = self.extractor.extract_point_id(data_line)
 
-
         #2) Check if site exisits if not create a site. 
         site = self._get_site(site_name)
 
@@ -48,23 +47,30 @@ class MonitoringPointProcessor:
             array = self._create_array(site, heading, array_name, mt_type)
             # add array to heading 
             master_array.arrays.append(array)
-
-        #5) Get Monitoring Point within the array object
-        mp = self._get_monitoring_point(array, mp_id)
-        if mp is None:
-            # no mp so need to create one
-            mp = self._create_monitoring_point(array, mp_id)
-        # add mp to array 
-        array.add_monitoring_point(mp)
-
-        #6) Create Triggers 
+ 
+        #5) Create Triggers 
         trigger_values =  [self.extractor.extract_trigger_1(data_line), 
             self.extractor.extract_trigger_2(data_line), self.extractor.extract_trigger_3(data_line)]
         
         triggers = self.create_triggers(trigger_values)
-
-        # add triggers to mp 
-        mp.add_triggers(triggers)
+        
+        # 6) check if overalisation point
+        ovalisation = self._check_for_overalisation(mp_id)
+        if ovalisation is not None:
+            oval = ovalisation()
+            oval.add_triggers(triggers)
+            array.add_overalisation(oval)
+        
+        else:
+            #7) Get Monitoring Point within the array object
+            mp = self._get_monitoring_point(array, mp_id)
+            if mp is None:
+                # no mp so need to create one
+                mp = self._create_monitoring_point(array, mp_id)
+            # add triggers
+            mp.add_triggers(triggers)
+            # add mp to array 
+            array.add_monitoring_point(mp)        
 
     def _check_mt(self, mt_type):
         for mt in MonitoringTypes:
@@ -97,6 +103,12 @@ class MonitoringPointProcessor:
 
     def _create_monitoring_point(self, array, mp_id):
         return MonitoringPoint(mp_id.lower())
+
+    
+    def _check_for_overalisation(self, mp_id):
+        for overalisation in self.ALLOWED_OVERLISATIONS:
+            if overalisation.CODE_TYPE == mp_id:
+                return overalisation
 
     def create_triggers(self, trigger_values):
         TRIGGER_COLORS =  ['forestgreen', 'orange', 'red']
@@ -153,8 +165,8 @@ class MeasurementPointProcessor:
 class ReportDataProcessor: 
     def __init__(self, report_vars):
         self.report_vars = report_vars # heading: vars{}
-        self.report_datas = {} # heading: [report_data, ]
-
+        self.report_datas = [] #[report_data, ]
+                    
     def process_report_data(self):
         for heading, report_var in self.report_vars.items():
             surveyor = report_var.surveyor.get()
@@ -170,23 +182,16 @@ class ReportDataProcessor:
                         array = master_array.get_array(mt_type)
                         if array is not None:
                             report_data.array_data.append(ArrayData(array, date))
-        for k, v in self.report_datas.items():
-            for data in v:
-                print(report_data.mt_type)
-                print(report_data.array_data)
         return self.report_datas
                         
     def get_report_data(self, heading, surveyor, mt_type):
-        report_datas = self.report_datas.get(heading)
-        if report_datas is not None:
-            for report_data in report_datas:
-                if report_data.mt_type == mt_type:
-                    return report_data
-            report_datas.append(ReportData(heading, surveyor, mt_type))
-        else:
-            report_data = ReportData(heading, surveyor, mt_type)
-            self.report_datas[heading] = [report_data]
+        for report_data in self.report_datas:
+            if report_data.heading == heading and report_data.mt_type == mt_type:
+                return report_data 
+        
+        report_data = ReportData(heading, surveyor, mt_type)
+        self.report_datas.append(report_data)
         return report_data 
-
+        
 
 

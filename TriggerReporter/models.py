@@ -186,6 +186,14 @@ class Array:
         self.name = name 
         self.active = True 
         self.monitoring_points = []
+        self.overalisations = []
+
+    def add_overalisation(self, oval):
+        for overalisation in self.overalisations:
+            if oval.CODE_TYPE == overalisation.CODE_TYPE:
+                # already exists don't add
+                return 
+        self.overalisations.append(oval)
 
     def toggle_active(self):
         if self.active:
@@ -309,6 +317,30 @@ class MonitoringPoint:
         return self.point_id 
 
 
+class Overalisation:
+    CODE_TYPE = ''
+    def __init__(self):
+        self._triggers = []
+        self.active = True
+
+    @property
+    def triggers(self):
+        return self._triggers
+
+    def add_triggers(self, triggers):
+        """extends the list of triggers from a list of triggers"""
+        self._triggers.extend(triggers)
+
+    
+
+class Overalisation1(Overalisation):
+    CODE_TYPE = '(M1+M5)-(M3+M7)'
+
+class Overalisation2(Overalisation):
+    CODE_TYPE = '(M2+M6)-(M4+M8)'
+
+
+
 class MeasurementPoint:
     CODE_TYPE = ''
     def __init__(self, point_id, date_time):
@@ -356,7 +388,7 @@ class ReportVar:
     def __init__(self, heading):
         self.heading = heading
         self.surveyor = tk.StringVar()
-        self.array_vars = {} # MAster Array: Arrayvar
+        self.array_vars = {} # Master Array: Arrayvar
 
 
 class ArrayVar:
@@ -388,15 +420,14 @@ class ReportData:
         self.mt_type = mt_type
         self.array_data = [] 
 
-
     def get_latest_date(self):
         return max((array.date for array in self.array_data))
     
     def __str__(self):
-        return f'{self.heading}-{self.surveyor}-{self.mt_type}'
+        return f'{self.heading.site} - {self.heading} - {self.mt_type}'
 
     def __repr__(self):
-        return f'{self.heading}-{self.surveyor}-{self.mt_type}'
+        return f'{self.heading.site} - {self.heading} - {self.mt_type}'
 
 
 class ArrayData:

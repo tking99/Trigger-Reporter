@@ -51,14 +51,28 @@ class SurveyMainDisplay(ttk.Frame):
         if self.vars:
             report_data_processor = ReportDataProcessor(self.vars)
             report_datas = report_data_processor.process_report_data()
-            for k, v in report_datas.items():
-                for report_data in v:
-                    #print(report_data.array_data)
-                    #print(report_data.mt_type)
-                    table = MonitoringResultsTableFactory.get_monitoring_table(report_data.mt_type)
-                    if table:
-                        table(report_data)
+            processed_report_data = []
+            for report_data in report_datas:
+                table = MonitoringResultsTableFactory.get_monitoring_table(report_data.mt_type)
+                if table:
+                    processed_report_data.append(report_data)
+                    table(report_data)
+            
+            if processed_report_data:
+                self.print_report_success(processed_report_data)
+            else:
+                self.print_report_unsuccess()
+
     
+    def print_report_success(self, processed_report_data):
+        tk.messagebox.showinfo(
+            title='Successfully Printed Reports', message=processed_report_data)
+
+    def print_report_unsuccess(self):
+        tk.messagebox.showerror(title='Unsuccessfully Printed reports', 
+            message='No reports were printed')
+
+
 class ArrayCanvas(tk.Canvas):
     def __init__(self, container, *args, **kwargs):
         super().__init__(container, *args, **kwargs)
@@ -88,7 +102,6 @@ class ArrayCanvas(tk.Canvas):
     def _on_mousewheel(self, event):
         self.yview_scroll(-int(event.delta/120), "units")
 
-    
     def load_array(self):
         count = -1 
         for site in self.container.project.sites:
