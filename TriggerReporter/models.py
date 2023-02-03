@@ -194,6 +194,7 @@ class Array:
                 # already exists don't add
                 return 
         self.overalisations.append(oval)
+    
 
     def toggle_active(self):
         if self.active:
@@ -226,6 +227,13 @@ class Array:
     def get_monitoring_point(self, point_id):
         for point in self.monitoring_points:
             if point.point_id.lower() == point_id.lower():
+                return point 
+
+    def get_monitoring_point_m(self, m):
+        """returns monitoring points if 'M1'.. 
+        if within the name"""
+        for point in self.monitoring_points:
+            if m.lower() in point.point_id.lower():
                 return point 
 
     def get_monitoring_point_ids(self):
@@ -319,7 +327,8 @@ class MonitoringPoint:
 
 class Overalisation:
     CODE_TYPE = ''
-    def __init__(self):
+    def __init__(self, array):
+        self.array = array
         self._triggers = []
         self.active = True
 
@@ -331,13 +340,42 @@ class Overalisation:
         """extends the list of triggers from a list of triggers"""
         self._triggers.extend(triggers)
 
-    
 
 class Overalisation1(Overalisation):
     CODE_TYPE = '(M1+M5)-(M3+M7)'
 
+    def compute_overalisation(self, date):
+        m1 = self.array.get_monitoring_point_m('M1')
+        m5 = self.array.get_monitoring_point_m('M5')
+        m3 = self.array.get_monitoring_point_m('M3')
+        m7 = self.array.get_monitoring_point_m('M7')
+        if m1 is not None and m5 is not None and m3 is not None and m7 is not None: 
+            m1_meas = m1.get_measurement_by_date(date)
+            m5_meas = m5.get_measurement_by_date(date)
+            m3_meas = m3.get_measurement_by_date(date)
+            m7_meas = m7.get_measurement_by_date(date)
+
+            if m1_meas is not None and m5_meas is not None and m3_meas is not None and m7_meas is not None:
+                return (m1_meas.delta_dist + m5_meas.delta_dist) - (m3_meas.delta_dist + m7_meas.delta_dist)
+        return 
+
+
 class Overalisation2(Overalisation):
     CODE_TYPE = '(M2+M6)-(M4+M8)'
+    def compute_overalisation(self, date):
+        m2 = self.array.get_monitoring_point_m('M2')
+        m6 = self.array.get_monitoring_point_m('M6')
+        m4 = self.array.get_monitoring_point_m('M4')
+        m8 = self.array.get_monitoring_point_m('M8')
+        if m2 is not None and m6 is not None and m4 is not None and m8 is not None: 
+            m2_meas = m2.get_measurement_by_date(date)
+            m6_meas = m6.get_measurement_by_date(date)
+            m4_meas = m4.get_measurement_by_date(date)
+            m8_meas = m8.get_measurement_by_date(date)
+
+            if m2_meas is not None and m6_meas is not None and m4_meas is not None and m8_meas is not None:
+                return (m2_meas.delta_dist + m6_meas.delta_dist) - (m4_meas.delta_dist + m8_meas.delta_dist)
+        return
 
 
 

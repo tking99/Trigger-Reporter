@@ -57,7 +57,7 @@ class MonitoringPointProcessor:
         # 6) check if overalisation point
         ovalisation = self._check_for_overalisation(mp_id)
         if ovalisation is not None:
-            oval = ovalisation()
+            oval = ovalisation(array)
             oval.add_triggers(triggers)
             array.add_overalisation(oval)
         

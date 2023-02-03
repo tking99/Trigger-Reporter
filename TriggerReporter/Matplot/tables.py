@@ -73,12 +73,16 @@ class MonitoringResultsTable:
         # check for overalisations
         if array.overalisations:
             for oval in array.overalisations:
-                cell_text.append([oval.CODE_TYPE, 'date', 'test'])
-                colour = self.get_cell_colour(10, oval.triggers)
-                cell_colours.append([colour,  colour, colour])
+                delta = oval.compute_overalisation(array_data.date)
+                if delta is not None:
+                    cell_text.append([oval.CODE_TYPE, str(array_data.date), f'{delta:1.1f}'])
+                    colour = self.get_cell_colour(delta, oval.triggers)
+                    cell_colours.append([colour,  colour, colour])
+                else:
+                    cell_text.append([oval.CODE_TYPE, '-', '-'])
+                    cell_colours.append(['grey',  'grey', 'grey'])
 
-
-        axTable.set_title(f'Array {array.name.title()}')
+        axTable.set_title(f'Array {array.name.title()}', pad=10)
         axTable.get_xaxis().set_visible(False)
         axTable.get_yaxis().set_visible(False)
         

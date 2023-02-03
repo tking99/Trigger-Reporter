@@ -6,6 +6,8 @@ Greenpark,Main Shaft,B,GWSMS001M5_RD,-15,-20,-75,Radial Displacement
 Greenpark,Main Shaft,B,GWSMS001M6_RD,-20,-25,-75,Radial Displacement
 Greenpark,Main Shaft,B,GWSMS001M7_RD,-15,-20,-75,Radial Displacement
 Greenpark,Main Shaft,B,GWSMS001M8_RD,-15,-20,-75,Radial Displacement
+Greenpark,Main Shaft,B,(M1+M5)-(M3+M7),10,20,30,Radial Displacement
+Greenpark,Main Shaft,B,(M2+M6)-(M4+M8),10,20,30,Radial Displacement
 Greenpark,Main Shaft,C,GWSMS003M1_RD,-10,-15,-75,Radial Displacement
 Greenpark,Main Shaft,C,GWSMS003M2_RD,-10,-15,-75,Radial Displacement
 Greenpark,Main Shaft,C,GWSMS003M3_RD,-10,-15,-75,Radial Displacement
@@ -14,6 +16,8 @@ Greenpark,Main Shaft,C,GWSMS003M5_RD,-15,-20,-75,Radial Displacement
 Greenpark,Main Shaft,C,GWSMS003M6_RD,-20,-25,-75,Radial Displacement
 Greenpark,Main Shaft,C,GWSMS003M7_RD,-15,-20,-75,Radial Displacement
 Greenpark,Main Shaft,C,GWSMS003M8_RD,-15,-20,-75,Radial Displacement
+Greenpark,Main Shaft,C,(M1+M5)-(M3+M7),10,20,30,Radial Displacement
+Greenpark,Main Shaft,C,(M2+M6)-(M4+M8),10,20,30,Radial Displacement
 Greenpark,Main Shaft,D,GWSMS008M1_RD,-10,-15,-75,Radial Displacement
 Greenpark,Main Shaft,D,GWSMS008M2_RD,-10,-15,-75,Radial Displacement
 Greenpark,Main Shaft,D,GWSMS008M3_RD,-10,-15,-75,Radial Displacement
@@ -22,6 +26,8 @@ Greenpark,Main Shaft,D,GWSMS008M5_RD,-15,-20,-75,Radial Displacement
 Greenpark,Main Shaft,D,GWSMS008M6_RD,-10,-15,-75,Radial Displacement
 Greenpark,Main Shaft,D,GWSMS008M7_RD,-15,-20,-75,Radial Displacement
 Greenpark,Main Shaft,D,GWSMS008M8_RD,-15,-20,-75,Radial Displacement
+Greenpark,Main Shaft,D,(M1+M5)-(M3+M7),10,20,30,Radial Displacement
+Greenpark,Main Shaft,D,(M2+M6)-(M4+M8),10,20,30,Radial Displacement
 Greenpark,Main Shaft,E,GWSMS013M1_RD,-10,-15,-75,Radial Displacement
 Greenpark,Main Shaft,E,GWSMS013M2_RD,-10,-15,-75,Radial Displacement
 Greenpark,Main Shaft,E,GWSMS013M3_RD,-10,-15,-75,Radial Displacement
@@ -30,6 +36,8 @@ Greenpark,Main Shaft,E,GWSMS013M5_RD,-15,-20,-75,Radial Displacement
 Greenpark,Main Shaft,E,GWSMS013M6_RD,-10,-15,-75,Radial Displacement
 Greenpark,Main Shaft,E,GWSMS013M7_RD,-10,-15,-75,Radial Displacement
 Greenpark,Main Shaft,E,GWSMS013M8_RD,-10,-15,-75,Radial Displacement
+Greenpark,Main Shaft,E,(M1+M5)-(M3+M7),10,20,30,Radial Displacement
+Greenpark,Main Shaft,E,(M2+M6)-(M4+M8),10,20,30,Radial Displacement
 Greenpark,Main Shaft,F,GWSMS018M1_RD,-5,-10,-75,Radial Displacement
 Greenpark,Main Shaft,F,GWSMS018M2_RD,-5,-10,-75,Radial Displacement
 Greenpark,Main Shaft,F,GWSMS018M3_RD,-5,-10,-75,Radial Displacement
@@ -38,6 +46,8 @@ Greenpark,Main Shaft,F,GWSMS018M5_RD,-15,-20,-75,Radial Displacement
 Greenpark,Main Shaft,F,GWSMS018M6_RD,-5,-10,-75,Radial Displacement
 Greenpark,Main Shaft,F,GWSMS018M7_RD,-10,-15,-75,Radial Displacement
 Greenpark,Main Shaft,F,GWSMS018M8_RD,-10,-10,-75,Radial Displacement
+Greenpark,Main Shaft,F,(M1+M5)-(M3+M7),10,20,30,Radial Displacement
+Greenpark,Main Shaft,F,(M2+M6)-(M4+M8),10,20,30,Radial Displacement
 Greenpark,Main Shaft,G,GWSMS023M1_RD,-5,-10,-75,Radial Displacement
 Greenpark,Main Shaft,G,GWSMS023M2_RD,-5,-10,-75,Radial Displacement
 Greenpark,Main Shaft,G,GWSMS023M3_RD,-5,-10,-75,Radial Displacement
