@@ -37,16 +37,17 @@ class TriggerReporterProject:
                 return
         self.sites.append(site)
 
-    def get_monitoring_point(self, point_id):
+    def get_monitoring_point(self, point_id, mt_type):
         """returns the monitoring point based on point_id passed in"""
         for site in self.sites:
             for heading in site.headings:
                 for master_array in heading.arrays:
                     for array in master_array.arrays:
-                        point = array.get_monitoring_point(point_id)
-                        if point is not None:
-                            return point 
-                       
+                        if array.CODE_TYPE == mt_type:
+                            point = array.get_monitoring_point(point_id)
+                            if point:
+                                return point
+                                           
     def __str__(self):
         return self.name
 

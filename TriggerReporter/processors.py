@@ -132,8 +132,8 @@ class MeasurementPointProcessor:
             self.process_measurement_point(data_line.split(self.extractor.SPLIT))
 
     def process_measurement_point(self, data_line):
-        mon_type = self.extractor.extract_monitoring_type(data_line)
-        point_class = self._get_measurement_point_class(mon_type)
+        mt_type = self.extractor.extract_monitoring_type(data_line)
+        point_class = self._get_measurement_point_class(mt_type)
     
         if point_class:
             point = None  
@@ -143,10 +143,16 @@ class MeasurementPointProcessor:
             elif point_class == Measurement3DPoint:
                 point = self.create_measurement_3d_point(data_line)
 
-            monitoring_point = self.project.get_monitoring_point(point.point_id)
+            monitoring_point = self.project.get_monitoring_point(point.point_id, mt_type)
     
             if monitoring_point:
                 monitoring_point.measurement_points.append(point)
+
+            # check if convergence if so also grab point from divergence data and add data
+            if mt_type == MonitoringTypes.CONVERGENCE.value:
+                monitoring_point = self.project.get_monitoring_point(point.point_id, MonitoringTypes.DIVERGENCE.value)
+                if monitoring_point:
+                    monitoring_point.measurement_points.append(point)
 
 
     def create_measurement_3d_point(self, data_line):
