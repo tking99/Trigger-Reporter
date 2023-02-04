@@ -18,7 +18,7 @@ class MonitoringResultsTable:
         self.fig_border = 'black'
         self.report_date = datetime.strftime(report_data.get_latest_date().date(),'%d %B %Y')
 
-        with PdfPages(f'{self.report_data.heading.site.name}_{self.report_data.heading.name}_{self.report_date}_{self.RESULTS_TYPE}.pdf') as self.pdf:
+        with PdfPages(f'{self.report_data.heading.site.name.upper()}_{self.report_data.heading.name}_{self.report_date}_{self.RESULTS_TYPE}.pdf') as self.pdf:
             self.plt_setup()
             index = 0
             for num, array_data in enumerate(self.report_data.array_data):

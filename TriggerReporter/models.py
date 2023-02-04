@@ -43,7 +43,7 @@ class TriggerReporterProject:
             for heading in site.headings:
                 for master_array in heading.arrays:
                     for array in master_array.arrays:
-                        if array.CODE_TYPE == mt_type:
+                        if array.CODE_TYPE.lower() == mt_type.lower():
                             point = array.get_monitoring_point(point_id)
                             if point:
                                 return point
@@ -52,11 +52,11 @@ class TriggerReporterProject:
         return self.name
 
 class MonitoringTypes(Enum):
-    CONVERGENCE = 'Convergence'
-    DIVERGENCE = 'Divergence'
-    RADIAL = 'Radial Displacement'
-    VECTOR = 'Vector'
-    POINT3D = '3D Point'
+    CONVERGENCE = 'convergence'
+    DIVERGENCE = 'divergence'
+    RADIAL = 'radial displacement'
+    VECTOR = 'vector'
+    POINT3D = '3d point'
 
 
 class Site:
@@ -129,12 +129,12 @@ class MasterArray:
 
     def activate_array(self, mt_type):
         for array in self.arrays:
-            if array.CODE_TYPE == mt_type:
+            if array.CODE_TYPE.lower() == mt_type.lower():
                 array.toggle_active()
 
     def has_active_array(self, mt_type):
         for array in self.arrays:
-            if array.CODE_TYPE == mt_type:
+            if array.CODE_TYPE.lower() == mt_type.lower():
                 return True 
         return False 
 
@@ -147,23 +147,23 @@ class MasterArray:
     
     def get_array(self, mt_type):
         for array in self.arrays:
-            if mt_type == array.CODE_TYPE:
+            if mt_type.lower() == array.CODE_TYPE.lower():
                 return array 
     
     def add_array(self, arr):
         for array in self.arrays: 
-            if arr.CODE_TYPE == array.CODE_TYPE:
+            if arr.CODE_TYPE.lower() == array.CODE_TYPE.lower():
                 return 
         self.arrays.append(arr)
 
     def get_latest_date(self, mt_type):
         for array in self.arrays:
-            if array.CODE_TYPE == mt_type:
+            if array.CODE_TYPE.lower() == mt_type.lower():
                 return array.get_latest_date()
 
     def get_monitoring_dates(self, mt_type):
         for array in self.arrays:
-            if array.CODE_TYPE == mt_type:
+            if array.CODE_TYPE.lower() == mt_type.lower():
                 return array.get_monitoring_dates()
         return set()
 
@@ -191,7 +191,7 @@ class Array:
 
     def add_overalisation(self, oval):
         for overalisation in self.overalisations:
-            if oval.CODE_TYPE == overalisation.CODE_TYPE:
+            if oval.CODE_TYPE.lower() == overalisation.CODE_TYPE.lower():
                 # already exists don't add
                 return 
         self.overalisations.append(oval)

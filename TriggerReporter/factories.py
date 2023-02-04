@@ -9,7 +9,7 @@ class ArrayFactory:
     @classmethod
     def get_array_class(cls, code_type):
         for Array in cls.ARRAYS:
-            if code_type.strip() == Array.CODE_TYPE:
+            if code_type.strip().lower() == Array.CODE_TYPE.lower():
                 return Array
 
 class MeasurementPointFactory:
@@ -17,7 +17,7 @@ class MeasurementPointFactory:
     @classmethod 
     def get_measurement_point(cls, code_type):
         for MEASUREMENT_POINT in cls.MEASUREMENT_POINTS:
-            if code_type.strip() in MEASUREMENT_POINT.CODE_TYPES:
+            if code_type.strip().lower() in MEASUREMENT_POINT.CODE_TYPES:
                 return MEASUREMENT_POINT
 
   
@@ -54,5 +54,5 @@ class MonitoringResultsTableFactory:
     @classmethod 
     def get_monitoring_table(cls, mt_type):
         for table in cls.MONITORING_TABLES:
-            if table.RESULTS_TYPE == mt_type:
+            if table.RESULTS_TYPE.lower() == mt_type.lower():
                 return table 

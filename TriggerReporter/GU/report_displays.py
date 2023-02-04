@@ -94,7 +94,7 @@ class ArrayCanvas(tk.Canvas):
         count = -1 
         for site in self.container.project.sites:
             count += 1
-            ttk.Label(self.array_frame, text=site.name.title()).grid(column=0, row=count, sticky='NW', padx=3, pady=6)
+            ttk.Label(self.array_frame, text=site.name.upper()).grid(column=0, row=count, sticky='NW', padx=3, pady=6)
             count +=1
             ttk.Separator(self.array_frame, orient=tk.HORIZONTAL).grid(column=0, row=count, columnspan=2, sticky='ew')
             for heading in site.headings:
