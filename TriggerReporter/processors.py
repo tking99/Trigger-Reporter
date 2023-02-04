@@ -57,10 +57,13 @@ class MonitoringPointProcessor:
         # 6) check if overalisation point
         ovalisation = self._check_for_overalisation(mp_id)
         if ovalisation is not None:
-            oval = ovalisation(array)
+            # check if ovalisation already exists
+            oval = self._get_ovalisation_point(array, mp_id)
+            if oval is None:
+                oval = ovalisation(array)
+                array.add_overalisation(oval)
             oval.add_triggers(triggers)
-            array.add_overalisation(oval)
-        
+            
         else:
             #7) Get Monitoring Point within the array object
             mp = self._get_monitoring_point(array, mp_id)
@@ -100,6 +103,9 @@ class MonitoringPointProcessor:
 
     def _get_monitoring_point(self, array, mp_id):
         return array.get_monitoring_point(mp_id)
+
+    def _get_ovalisation_point(self, array, mp_id):
+        return array.get_ovalisation_point(mp_id)
 
     def _create_monitoring_point(self, array, mp_id):
         return MonitoringPoint(mp_id.lower())

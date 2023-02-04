@@ -54,7 +54,7 @@ class SurveyMainDisplay(ttk.Frame):
     
     def print_report_success(self, processed_report_data):     
         tk.messagebox.showinfo(
-            title='Successfully Printed Reports')
+            title='Success', message='Succesfully printed the reports')
 
     def print_report_unsuccess(self):
         tk.messagebox.showerror(title='Unsuccessfully Printed reports', 
@@ -101,15 +101,15 @@ class ArrayCanvas(tk.Canvas):
                 report_var = ReportVar(heading)
                 self.container.vars[heading] = report_var
                 count += 1 
-                ttk.Label(self.array_frame, text=heading.name.title()).grid(column=1, row=count, sticky='NW', padx=10, pady=6)
-                ttk.Label(self.array_frame, text=MonitoringTypes.CONVERGENCE.value).grid(column=3, row=count, sticky='NEW', padx=3, pady=3,
+                ttk.Label(self.array_frame, text=heading.name.title()).grid(column=1, row=count, sticky='NW', padx=3, pady=3)
+                ttk.Label(self.array_frame, text=MonitoringTypes.CONVERGENCE.value).grid(column=2, row=count, sticky='NEW', padx=3, pady=3,
                     columnspan=2)
-                ttk.Label(self.array_frame, text=MonitoringTypes.DIVERGENCE.value).grid(column=5, row=count, sticky='NEW', padx=3, pady=3,
+                ttk.Label(self.array_frame, text=MonitoringTypes.DIVERGENCE.value).grid(column=4, row=count, sticky='NEW', padx=3, pady=3,
                     columnspan=2)
-                ttk.Label(self.array_frame, text=MonitoringTypes.RADIAL.value[0:6]).grid(column=7, row=count, sticky='NEW', padx=3, pady=3,
+                ttk.Label(self.array_frame, text=MonitoringTypes.RADIAL.value[0:6]).grid(column=6, row=count, sticky='NEW', padx=3, pady=3,
                     columnspan=2) 
-                ttk.Label(self.array_frame, text='Surveyor: ').grid(column=9, row=count, sticky='NW', padx=3, pady=3)
-                ttk.Entry(self.array_frame, textvariable=report_var.surveyor).grid(column=10, row=count, sticky='NW', padx=5, pady=3)
+                ttk.Label(self.array_frame, text='Surveyor: ').grid(column=8, row=count, sticky='NW', padx=3, pady=3)
+                ttk.Entry(self.array_frame, textvariable=report_var.surveyor).grid(column=9, row=count, sticky='NW', padx=5, pady=3)
                 count +=1
                 ttk.Separator(self.array_frame, orient=tk.HORIZONTAL).grid(column=1, row=count, columnspan=10, sticky='ew')
                 for array in heading.arrays:
@@ -117,28 +117,27 @@ class ArrayCanvas(tk.Canvas):
                     array_var = ArrayVar(array)
                     report_var.array_vars[array] = array_var 
                     count +=1 
-                    ttk.Button(self.array_frame, text='Edit').grid(column=1, row=count, sticky='NW', padx=3, pady=3)
-                    ttk.Label(self.array_frame, text=array.name.title()).grid(column=2, row=count, sticky='NW', padx=3, pady=3)
+                    ttk.Label(self.array_frame, text=array.name.title()).grid(column=1, row=count, sticky='EW', padx=3, pady=3)
 
                    ### Convergence
                     ttk.Checkbutton(self.array_frame, variable=array_var.vars[MonitoringTypes.CONVERGENCE.value][0], onvalue=True,
-            offvalue=False, command=partial(self.toggle_array, array, MonitoringTypes.CONVERGENCE.value)).grid(column=3, row=count, sticky='NW', padx=3, pady=3)
+            offvalue=False, command=partial(self.toggle_array, array, MonitoringTypes.CONVERGENCE.value)).grid(column=2, row=count, sticky='NW', padx=3, pady=3)
                     menu_con = tk.OptionMenu(self.array_frame, array_var.vars[MonitoringTypes.CONVERGENCE.value][1], 
                     array.get_latest_date(MonitoringTypes.CONVERGENCE.value), *array.get_monitoring_dates(MonitoringTypes.CONVERGENCE.value))
-                    menu_con.grid(column=4, row=count, sticky='NW')
+                    menu_con.grid(column=3, row=count, sticky='NW')
                    
                     ### Divergence 
                     ttk.Checkbutton(self.array_frame, variable=array_var.vars[MonitoringTypes.DIVERGENCE.value][0], onvalue=True,
-            offvalue=False, command=partial(self.toggle_array, array, MonitoringTypes.DIVERGENCE.value)).grid(column=5, row=count, sticky='NW', padx=3, pady=3)
+            offvalue=False, command=partial(self.toggle_array, array, MonitoringTypes.DIVERGENCE.value)).grid(column=4, row=count, sticky='NW', padx=3, pady=3)
                     menu_con = tk.OptionMenu(self.array_frame, array_var.vars[MonitoringTypes.DIVERGENCE.value][1],
                     array.get_latest_date(MonitoringTypes.DIVERGENCE.value), *array.get_monitoring_dates(MonitoringTypes.DIVERGENCE.value))
-                    menu_con.grid(column=6, row=count, sticky='NW')
+                    menu_con.grid(column=5, row=count, sticky='NW')
                      
                     ### Radial
                     ttk.Checkbutton(self.array_frame, variable=array_var.vars[MonitoringTypes.RADIAL.value][0], onvalue=True,
-            offvalue=False, command=partial(self.toggle_array, array, MonitoringTypes.RADIAL.value)).grid(column=7, row=count, sticky='NW', padx=3, pady=3)
+            offvalue=False, command=partial(self.toggle_array, array, MonitoringTypes.RADIAL.value)).grid(column=6, row=count, sticky='NW', padx=3, pady=3)
                     menu_con = tk.OptionMenu(self.array_frame, array_var.vars[MonitoringTypes.RADIAL.value][1], array.get_latest_date(MonitoringTypes.RADIAL.value), *array.get_monitoring_dates(MonitoringTypes.RADIAL.value))
-                    menu_con.grid(column=8, row=count, sticky='NW')
+                    menu_con.grid(column=7, row=count, sticky='NW')
                  
     def toggle_array(self, array, mt_type):
         arr = array.get_array(mt_type)

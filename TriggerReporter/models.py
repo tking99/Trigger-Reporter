@@ -195,7 +195,6 @@ class Array:
                 return 
         self.overalisations.append(oval)
     
-
     def toggle_active(self):
         if self.active:
             self.active = False 
@@ -227,7 +226,12 @@ class Array:
     def get_monitoring_point(self, point_id):
         for point in self.monitoring_points:
             if point.point_id.lower() == point_id.lower():
-                return point 
+                return point
+    
+    def get_ovalisation_point(self, point_id):
+        for oval in self.overalisations:
+            if point_id.lower() == oval.CODE_TYPE.lower():
+                return oval 
 
     def get_monitoring_point_m(self, m):
         """returns monitoring points if 'M1'.. 
@@ -285,8 +289,8 @@ class MonitoringPoint:
         self.active = not self.active 
     
     def add_triggers(self, triggers):
-        """extends the list of triggers from a list of triggers"""
-        self._triggers.extend(triggers)
+        """overwrites the existing triggers list with new uploaded triggers"""
+        self._triggers = triggers
 
     def get_sorted_measurements(self):
         """returns a list of sorted measurements by date"""
@@ -337,8 +341,8 @@ class Overalisation:
         return self._triggers
 
     def add_triggers(self, triggers):
-        """extends the list of triggers from a list of triggers"""
-        self._triggers.extend(triggers)
+        """overwrites the existing triggers list with new uploaded triggers"""
+        self._triggers = triggers
 
 
 class Overalisation1(Overalisation):

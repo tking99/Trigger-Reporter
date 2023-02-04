@@ -68,8 +68,6 @@ class MonitoringResultsTable:
         plt.box(on=None)
         plt.suptitle(f'{self.report_data.heading.site.name.title()} {self.report_data.heading.name.title()} {self.RESULTS_TYPE.title()} Triggers')
 
-
-    
     def create_table(self, array_data, index):
         array = array_data.array 
         axTable = plt.subplot(2,self.ARRAYS_PER_ROW, index, frame_on=False)

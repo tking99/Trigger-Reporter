@@ -22,11 +22,6 @@ class MainNavbar(tk.Menu):
         self.import_menu.add_command(label='Import Monitoring Points', command=self.controller.import_monitoring_points, state='disabled')
         self.import_menu.add_command(label='Import Measurements', command=self.controller.import_measurements, state='disabled')
 
-        # export menu 
-        self.export_menu = tk.Menu(self, tearoff=0)
-        self.add_cascade(label='Export', menu=self.export_menu)
-        self.export_menu.add_command(label='Create Report', command=self.controller.create_report)
-
     def new_project(self):
         """Create a new project"""
         self.controller.project = ProjectDisplayManager.new_project()

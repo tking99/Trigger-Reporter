@@ -69,14 +69,7 @@ class TriggerReporter(tk.Tk):
         lines = CSVFileReader.read(meas_file.name, True)
         meas_processor.process_measurement_points(lines)
         self.load_survey_window()
-   
-    def create_report(self):
-        pass 
-    
-    
-    def print_report(self):
-        pass
-            
+        
     def set_project_title(self):
         """Appends the project name to the title"""
         self.title(f'Trigger Reporter - {self.project.name}')
