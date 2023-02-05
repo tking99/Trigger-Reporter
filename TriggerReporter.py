@@ -57,19 +57,23 @@ class TriggerReporter(tk.Tk):
         self.nav_menu.enable_project_menu()
 
     def import_monitoring_points(self):
-        mon_file = ProjectDisplayManager.import_monitoring_points(self.project)
-        mon_processor = MonitoringPointProcessor(self.project)
-        lines = CSVFileReader.read(mon_file.name, False)
-        mon_processor.process_mass_monitoring_points(lines)
-        self.load_survey_window()
+        mon_files = ProjectDisplayManager.import_monitoring_points(self.project)
+        if mon_files:
+            mon_processor = MonitoringPointProcessor(self.project)
+            for mon_file in mon_files:
+                lines = CSVFileReader.read(Path(mon_file), False)
+                mon_processor.process_mass_monitoring_points(lines)
+            self.load_survey_window()
     
     def import_measurements(self):
-        meas_file = ProjectDisplayManager.import_measurements(self.project)
-        meas_processor = MeasurementPointProcessor(self.project)
-        lines = CSVFileReader.read(meas_file.name, True)
-        meas_processor.process_measurement_points(lines)
-        self.load_survey_window()
-        
+        meas_files = ProjectDisplayManager.import_measurements(self.project)
+        if meas_files:
+            meas_processor = MeasurementPointProcessor(self.project)
+            for meas_file in meas_files:
+                lines = CSVFileReader.read(Path(meas_file), True)
+                meas_processor.process_measurement_points(lines)
+            self.load_survey_window()
+            
     def set_project_title(self):
         """Appends the project name to the title"""
         self.title(f'Trigger Reporter - {self.project.name}')

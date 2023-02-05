@@ -1,7 +1,7 @@
 import os
 import tkinter as tk 
 from tkinter import ttk 
-from tkinter.filedialog import asksaveasfile, askopenfile
+from tkinter.filedialog import asksaveasfile, askopenfile, askopenfilenames
 from pathlib import Path
 
 from TriggerReporter.models import TriggerReporterProject
@@ -9,7 +9,9 @@ from TriggerReporter.pickler import ProjectPickler
 
 #os.path.basename(Path(project_path))
 
-class ProjectDisplayManager:    
+class ProjectDisplayManager: 
+    ALLOWED_FILE_MON_TYPES = (('CSV', '.csv'),) 
+    ALLOWED_FILE_MEAS_TYPES = (('TXT','.txt'),) 
     @classmethod 
     def new_project(self):
         """Creates a new project"""
@@ -47,11 +49,11 @@ class ProjectDisplayManager:
 
     @classmethod 
     def import_monitoring_points(cls, project):
-        return askopenfile()
+        return askopenfilenames(filetypes=cls.ALLOWED_FILE_MON_TYPES)
 
     @classmethod 
     def import_measurements(cls, project):
-        return askopenfile()
+        return askopenfilenames(filetypes=cls.ALLOWED_FILE_MEAS_TYPES)
       
 
 
