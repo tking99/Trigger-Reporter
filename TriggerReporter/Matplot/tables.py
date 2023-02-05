@@ -1,5 +1,6 @@
 from datetime import datetime
 import math
+import os
 import numpy as np
 from matplotlib.backends.backend_pdf import PdfPages
 import matplotlib.pyplot as plt
@@ -13,15 +14,17 @@ class MonitoringResultsTable:
     TRIGGER_HEADERS = ['Point ID', 'Green(mm)', 'Amber(mm)', 'Red(mm)']
     ARRAYS_PER_ROW = 2 # default values
     ARRAYS_PER_PAGE = 4 # default values
-    def __init__(self, report_data):
+    def __init__(self, report_data, pdf_directory):
         self.report_data = report_data
         self.fig_border = 'black'
         self.report_date = datetime.strftime(report_data.get_latest_date().date(),'%d %B %Y')
+        self.pdf_directory = pdf_directory
+        file_name = os.path.join(self.pdf_directory, f'{self.report_data.heading.site.name.upper()}_{self.report_data.heading.name}_{self.report_date}_{self.RESULTS_TYPE}.pdf')
         
         # set the Arrays per page formatting
         self.array_per_page()
 
-        with PdfPages(f'{self.report_data.heading.site.name.upper()}_{self.report_data.heading.name}_{self.report_date}_{self.RESULTS_TYPE}.pdf') as self.pdf:
+        with PdfPages(file_name) as self.pdf:
             self.plt_setup()
             index = 0
             for num, array_data in enumerate(self.report_data.array_data):

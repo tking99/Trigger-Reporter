@@ -6,6 +6,7 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import tix 
 
+
 from tkcalendar import Calendar, DateEntry
 from tktimepicker import SpinTimePickerModern, constants
 
@@ -37,19 +38,21 @@ class SurveyMainDisplay(ttk.Frame):
 
     def print_reports(self):
         if self.vars:
-            report_data_processor = ReportDataProcessor(self.vars)
-            report_datas = report_data_processor.process_report_data()
-            processed_report_data = []
-            for report_data in report_datas:
-                table = MonitoringResultsTableFactory.get_monitoring_table(report_data.mt_type)
-                if table:
-                    processed_report_data.append(report_data)
-                    table(report_data)
-            
-            if processed_report_data:
-                self.print_report_success(processed_report_data)
-            else:
-                self.print_report_unsuccess()
+            pdf_directory = tk.filedialog.askdirectory()
+            if pdf_directory:
+                report_data_processor = ReportDataProcessor(self.vars)
+                report_datas = report_data_processor.process_report_data()
+                processed_report_data = []
+                for report_data in report_datas:
+                    table = MonitoringResultsTableFactory.get_monitoring_table(report_data.mt_type)
+                    if table:
+                        processed_report_data.append(report_data)
+                        table(report_data, pdf_directory)
+                
+                if processed_report_data:
+                    self.print_report_success(processed_report_data)
+                else:
+                    self.print_report_unsuccess()
 
     
     def print_report_success(self, processed_report_data):     

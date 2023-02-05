@@ -1,3 +1,0 @@
-Finish working on master array 
-check master array works 
-work on display 
