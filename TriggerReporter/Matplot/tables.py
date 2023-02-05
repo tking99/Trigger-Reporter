@@ -11,12 +11,15 @@ class MonitoringResultsTable:
     RESULTS_TYPE = ''
     COLUMN_HEADERS = ['Point ID', 'Date:Time', 'Convergence(mm)']
     TRIGGER_HEADERS = ['Point ID', 'Green(mm)', 'Amber(mm)', 'Red(mm)']
-    ARRAYS_PER_ROW = 2
-    ARRAYS_PER_PAGE = 4
+    ARRAYS_PER_ROW = 2 # default values
+    ARRAYS_PER_PAGE = 4 # default values
     def __init__(self, report_data):
         self.report_data = report_data
         self.fig_border = 'black'
         self.report_date = datetime.strftime(report_data.get_latest_date().date(),'%d %B %Y')
+        
+        # set the Arrays per page formatting
+        self.array_per_page()
 
         with PdfPages(f'{self.report_data.heading.site.name.upper()}_{self.report_data.heading.name}_{self.report_date}_{self.RESULTS_TYPE}.pdf') as self.pdf:
             self.plt_setup()
@@ -45,6 +48,11 @@ class MonitoringResultsTable:
             self.plt_save_close()
 
 
+    def array_per_page(self):
+        if len(self.report_data) < 6:
+            self.ARRAYS_PER_ROW = 3
+            self.ARRAYS_PER_PAGE = 6
+
     def plt_save_close(self):
         plt.draw()
         fig = plt.gcf()
@@ -70,7 +78,7 @@ class MonitoringResultsTable:
 
     def create_table(self, array_data, index):
         array = array_data.array 
-        axTable = plt.subplot(2,self.ARRAYS_PER_ROW, index, frame_on=False)
+        axTable = plt.subplot(self.ARRAYS_PER_ROW, self.ARRAYS_PER_ROW, index, frame_on=False)
         
         row_headers = array.get_monitoring_point_ids()
         
@@ -116,7 +124,7 @@ class MonitoringResultsTable:
     
     def create_trigger_table(self, array_data, index):
         array = array_data.array 
-        axTable = plt.subplot(2,self.ARRAYS_PER_ROW, index, frame_on=False)
+        axTable = plt.subplot(self.ARRAYS_PER_ROW, self.ARRAYS_PER_ROW, index, frame_on=False)
         axTable.annotate(f'Drawing No: {array.drawing_no}', (0,0), (0, -8), xycoords='axes fraction', textcoords='offset points', va='top', fontsize=4)
 
         row_headers = array.get_monitoring_point_ids()

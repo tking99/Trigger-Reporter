@@ -1,6 +1,7 @@
 import os 
 from pathlib import Path
 from enum import Enum
+from statistics import mean
 
 import tkinter as tk 
 from tkinter import ttk
@@ -190,6 +191,9 @@ class Array:
         self.overalisations = []
         self.drawing_no = drawing_no
 
+    def __len__(self):
+        return len(self.monitoring_points) + len(self.overalisations)
+    
     def add_overalisation(self, oval):
         for overalisation in self.overalisations:
             if oval.CODE_TYPE.lower() == overalisation.CODE_TYPE.lower():
@@ -465,6 +469,9 @@ class ReportData:
         self.mt_type = mt_type
         self.array_data = [] 
 
+    def __len__(self):
+        return mean((len(array.array) for array in self.array_data))
+    
     def get_latest_date(self):
         return max((array.date for array in self.array_data))
     
