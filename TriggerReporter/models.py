@@ -181,13 +181,14 @@ class MasterArray:
 
 class Array:
     CODE_TYPE = ''
-    def __init__(self, site, heading, name): 
+    def __init__(self, site, heading, name, drawing_no=''): 
         self.site = site 
         self.heading = heading
         self.name = name 
         self.active = True 
         self.monitoring_points = []
         self.overalisations = []
+        self.drawing_no = drawing_no
 
     def add_overalisation(self, oval):
         for overalisation in self.overalisations:
@@ -422,9 +423,10 @@ class Measurement3DPoint(MeasurementPoint):
 
 
 class Trigger:
-    def __init__(self, color, value):
+    def __init__(self, color, value, drawing_no=None):
         self.color = color 
-        self.value = value 
+        self.value = value
+     
 
 
 class ReportVar:

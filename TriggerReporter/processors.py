@@ -28,7 +28,8 @@ class MonitoringPointProcessor:
         heading_name = self.extractor.extract_heading_name(data_line)
         array_name = self.extractor.extract_convergence_array_name(data_line)
         mp_id = self.extractor.extract_point_id(data_line)
-
+        drawing_no = self.extractor.extract_drawining_no(data_line)
+    
         #2) Check if site exisits if not create a site. 
         site = self._get_site(site_name)
 
@@ -44,7 +45,7 @@ class MonitoringPointProcessor:
 
         array = master_array.get_array(mt_type)
         if array is None:
-            array = self._create_array(site, heading, array_name, mt_type)
+            array = self._create_array(site, heading, array_name, mt_type, drawing_no)
             # add array to heading 
             master_array.arrays.append(array)
  
@@ -96,10 +97,10 @@ class MonitoringPointProcessor:
             site.add_heading(heading)
         return heading 
 
-    def _create_array(self, site, heading, array_name, mt_type):
+    def _create_array(self, site, heading, array_name, mt_type, drawing_no):
         Array_Cls = ArrayFactory.get_array_class(mt_type)
         if Array_Cls is not None:
-            return Array_Cls(site, heading, array_name)
+            return Array_Cls(site, heading, array_name, drawing_no)
 
     def _get_monitoring_point(self, array, mp_id):
         return array.get_monitoring_point(mp_id)

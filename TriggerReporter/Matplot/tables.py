@@ -117,7 +117,8 @@ class MonitoringResultsTable:
     def create_trigger_table(self, array_data, index):
         array = array_data.array 
         axTable = plt.subplot(2,self.ARRAYS_PER_ROW, index, frame_on=False)
-        
+        axTable.annotate(f'Drawing No: {array.drawing_no}', (0,0), (0, -8), xycoords='axes fraction', textcoords='offset points', va='top', fontsize=4)
+
         row_headers = array.get_monitoring_point_ids()
         
         #Table Styles

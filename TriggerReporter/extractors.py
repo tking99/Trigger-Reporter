@@ -68,6 +68,12 @@ class MonitoringPointCSVExtractor:
 
     @classmethod 
     def extract_monitoring_type(cls, line):
+        return line[7]
+    
+    @classmethod
+    def extract_drawining_no(cls, line):
         return line[-1].split('\n')[0]
- 
+    
+
+    
     
