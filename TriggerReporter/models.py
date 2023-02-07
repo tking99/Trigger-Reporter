@@ -1,4 +1,5 @@
 import os 
+from datetime import timedelta
 from pathlib import Path
 from enum import Enum
 from statistics import mean
@@ -49,9 +50,10 @@ class TriggerReporterProject:
                             point = array.get_monitoring_point(point_id)
                             if point:
                                 return point
-                                           
+
     def __str__(self):
         return self.name
+
 
 class MonitoringTypes(Enum):
     CONVERGENCE = 'convergence'
@@ -282,10 +284,11 @@ class Point3DArray(Array):
 
 
 class MonitoringPoint:
+    TIME_RANGE = 3
     def __init__(self, point_id): 
         self.point_id = point_id 
         self._triggers = []
-        self.measurement_points = []
+        self.measurement_points = []          
         self.active = True 
 
     @property
@@ -311,10 +314,13 @@ class MonitoringPoint:
             return meas[0]
 
     def get_measurement_by_date(self, date_time):
-        """returns the measurement associated to the date"""
+        """returns the measurement associated to the date within a 
+        certain date range"""
         if self.measurement_points: 
+            lower_range = date_time - timedelta(hours=self.TIME_RANGE) 
+            upper_range = date_time + timedelta(hours=self.TIME_RANGE)
             for meas in self.get_sorted_measurements():
-                if meas.date_time.date() == date_time.date():
+                if lower_range <= meas.date_time <= upper_range:
                     return meas
 
     def get_latest_date(self):
@@ -432,7 +438,6 @@ class Trigger:
         self.color = color 
         self.value = value
      
-
 
 class ReportVar:
     def __init__(self, heading):

@@ -1,6 +1,7 @@
 import tkinter as tk
 
 from TriggerReporter.GU.project_managers import ProjectDisplayManager
+from TriggerReporter.GU.about_display import AboutDisplay
 
 
 class MainNavbar(tk.Menu):
@@ -22,9 +23,15 @@ class MainNavbar(tk.Menu):
         self.import_menu.add_command(label='Import Monitoring Points', command=self.controller.import_monitoring_points, state='disabled')
         self.import_menu.add_command(label='Import Measurements', command=self.controller.import_measurements, state='disabled')
 
+        # Help Menu 
+        self.help_menu = tk.Menu(self, tearoff=0)
+        self.add_cascade(label='Help', menu=self.help_menu)
+        self.help_menu.add_command(label='About', command=self.display_about)
+
     def new_project(self):
         """Create a new project"""
         self.controller.project = ProjectDisplayManager.new_project()
+        self.controller.load_survey_window()
 
     def open_project(self):
         """Load an existing project"""
@@ -53,4 +60,10 @@ class MainNavbar(tk.Menu):
         self.file_menu.entryconfig('Save', state='normal')
         self.import_menu.entryconfig('Import Monitoring Points', state='normal')
         self.import_menu.entryconfig('Import Measurements', state='normal')
+
+
+    def display_about(self):
+        """Displays the about view"""
+        about_display = AboutDisplay(self.controller.main_frame)
+        about_display.grab_set()
     
