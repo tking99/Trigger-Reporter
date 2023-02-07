@@ -2,6 +2,7 @@ import os
 from pathlib import Path
 from enum import Enum
 from statistics import mean
+import math
 
 import tkinter as tk 
 from tkinter import ttk
@@ -313,7 +314,7 @@ class MonitoringPoint:
         """returns the measurement associated to the date"""
         if self.measurement_points: 
             for meas in self.get_sorted_measurements():
-                if meas.date_time == date_time:
+                if meas.date_time.date() == date_time.date():
                     return meas
 
     def get_latest_date(self):
@@ -470,7 +471,7 @@ class ReportData:
         self.array_data = [] 
 
     def __len__(self):
-        return mean((len(array.array) for array in self.array_data))
+        return math.ceil(mean((len(array.array) for array in self.array_data)))
     
     def get_latest_date(self):
         return max((array.date for array in self.array_data))

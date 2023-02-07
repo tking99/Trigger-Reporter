@@ -1,5 +1,6 @@
 import os
-import time 
+import time
+from datetime import datetime 
 from sys import exit 
 from pathlib import Path
 
@@ -91,9 +92,14 @@ class TriggerReporter(tk.Tk):
                 self.nav_menu.save_as_project()
         exit()
      
-
+end_trial = datetime.strptime('31-03-2023', '%d-%m-%Y')
 
 if __name__ == "__main__":
-    main = TriggerReporter()
-    main.protocol('WM_DELETE_WINDOW', main.exit)
-    main.mainloop()
+    if datetime.today() < end_trial:
+        main = TriggerReporter()
+        main.protocol('WM_DELETE_WINDOW', main.exit)
+        main.mainloop()
+    else:
+        tk.messagebox.showerror(title='Version Error',
+            message='Please contact Tom King for latest version.')
+

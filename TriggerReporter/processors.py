@@ -133,9 +133,9 @@ class MeasurementPointProcessor:
             self.process_measurement_point(data_line.split(self.extractor.SPLIT))
 
     def process_measurement_point(self, data_line):
-        mt_type = self.extractor.extract_monitoring_type(data_line)
+        mt_type = self.extractor.extract_monitoring_type(data_line).lower()
         point_class = self._get_measurement_point_class(mt_type)
-    
+       
         if point_class:
             point = None  
             if point_class == MeasurementDistancePoint:

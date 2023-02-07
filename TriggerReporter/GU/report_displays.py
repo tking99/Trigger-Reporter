@@ -44,10 +44,10 @@ class SurveyMainDisplay(ttk.Frame):
                 report_datas = report_data_processor.process_report_data()
                 processed_report_data = []
                 for report_data in report_datas:
-                    table = MonitoringResultsTableFactory.get_monitoring_table(report_data.mt_type)
-                    if table:
+                    table_class = MonitoringResultsTableFactory.get_monitoring_table(report_data.mt_type)
+                    if table_class:
                         processed_report_data.append(report_data)
-                        table(report_data, pdf_directory)
+                        table_class(report_data, pdf_directory)
                 
                 if processed_report_data:
                     self.print_report_success(processed_report_data)

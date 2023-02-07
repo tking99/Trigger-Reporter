@@ -19,12 +19,12 @@ class MonitoringResultsTable:
         self.fig_border = 'black'
         self.report_date = datetime.strftime(report_data.get_latest_date().date(),'%d %B %Y')
         self.pdf_directory = pdf_directory
-        file_name = os.path.join(self.pdf_directory, f'{self.report_data.heading.site.name.upper()}_{self.report_data.heading.name}_{self.report_date}_{self.RESULTS_TYPE}.pdf')
+        self.file_name = os.path.join(self.pdf_directory, f'{self.report_data.heading.site.name.upper()}_{self.report_data.heading.name}_{self.report_date}_{self.RESULTS_TYPE}.pdf')
         
         # set the Arrays per page formatting
         self.array_per_page()
 
-        with PdfPages(file_name) as self.pdf:
+        with PdfPages(self.file_name) as self.pdf:
             self.plt_setup()
             index = 0
             for num, array_data in enumerate(self.report_data.array_data):
@@ -52,7 +52,7 @@ class MonitoringResultsTable:
 
 
     def array_per_page(self):
-        if len(self.report_data) < 6:
+        if len(self.report_data) < 7:
             self.ARRAYS_PER_ROW = 3
             self.ARRAYS_PER_PAGE = 6
 
@@ -69,7 +69,7 @@ class MonitoringResultsTable:
                     edgecolor=self.fig_border,
                     layout='constrained')
         plt.box(on=None)
-        plt.suptitle(f'{self.report_data.heading.site.name.title()} {self.report_data.heading.name.title()} {self.RESULTS_TYPE.title()}\n \
+        plt.suptitle(f'{self.report_data.heading.site.name.upper()} {self.report_data.heading.name.title()} {self.RESULTS_TYPE.title()}\n \
             {self.report_date}     Surveyor: {self.report_data.surveyor.title()}')
        
     def plt_trigger_setup(self):
@@ -77,7 +77,7 @@ class MonitoringResultsTable:
                     edgecolor=self.fig_border,
                     layout='constrained')
         plt.box(on=None)
-        plt.suptitle(f'{self.report_data.heading.site.name.title()} {self.report_data.heading.name.title()} {self.RESULTS_TYPE.title()} Triggers')
+        plt.suptitle(f'{self.report_data.heading.site.name.upper()} {self.report_data.heading.name.title()} {self.RESULTS_TYPE.title()} Triggers')
 
     def create_table(self, array_data, index):
         array = array_data.array 
@@ -117,13 +117,15 @@ class MonitoringResultsTable:
         axTable.get_xaxis().set_visible(False)
         axTable.get_yaxis().set_visible(False)
         
-        axTable.table(cellText=cell_text,
+        table = axTable.table(cellText=cell_text,
                       rowLoc='right',
                       colColours=ccolors,
                       colLabels=self.COLUMN_HEADERS,
                       loc='center',
                       cellColours=cell_colours)
-
+        table.auto_set_font_size(False)
+        table.set_fontsize(4)
+        table.scale(1.2, 1)
     
     def create_trigger_table(self, array_data, index):
         array = array_data.array 
@@ -151,11 +153,14 @@ class MonitoringResultsTable:
         axTable.get_xaxis().set_visible(False)
         axTable.get_yaxis().set_visible(False)
         
-        axTable.table(cellText=cell_text,
+        table = axTable.table(cellText=cell_text,
                       rowLoc='right',
                       colColours=ccolors,
                       colLabels=self.TRIGGER_HEADERS,
                       loc='center')
+        table.auto_set_font_size(False)
+        table.set_fontsize(4)
+        table.scale(1.2, 1)
 
     def get_cell_colour(self, value, triggers):
         """returns the trigger color based on the value passed in, checks last trigger first"""
