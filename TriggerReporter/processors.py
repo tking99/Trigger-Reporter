@@ -124,6 +124,7 @@ class MonitoringPointProcessor:
         return [Trigger(color, float(value)) for color, value in zip(TRIGGER_COLORS, trigger_values)]
 
 class MeasurementPointProcessor:
+    MT_TYPES = ['radial displacement', 'convergence', 'divergence']
     def __init__(self, project, extractor=None):
         self.project = project 
         self.extractor = AmbergMeasurementExtractor
@@ -134,28 +135,56 @@ class MeasurementPointProcessor:
 
     def process_measurement_point(self, data_line):
         mt_type = self.extractor.extract_monitoring_type(data_line).lower()
-        point_class = self._get_measurement_point_class(mt_type)
+        if mt_type not in self.MT_TYPES:
+            return  
        
-        if point_class:
-            point = None  
-            if point_class == MeasurementDistancePoint:
-                point = self.create_measurement_dist_point(data_line)
+        point_class = self._get_measurement_point_class(mt_type)
+        check = self.checker(mt_type, data_line)
+        if check: 
+            if point_class:
+                point = None  
+                if point_class == MeasurementDistancePoint:
+                    point = self.create_measurement_dist_point(data_line)
 
-            elif point_class == Measurement3DPoint:
-                point = self.create_measurement_3d_point(data_line)
+                elif point_class == Measurement3DPoint:
+                    point = self.create_measurement_3d_point(data_line)
 
-            monitoring_point = self.project.get_monitoring_point(point.point_id, mt_type)
-    
-            if monitoring_point:
-                monitoring_point.measurement_points.append(point)
-
-            # check if convergence if so also grab point from divergence data and add data
-            if mt_type == MonitoringTypes.CONVERGENCE.value:
-                monitoring_point = self.project.get_monitoring_point(point.point_id, MonitoringTypes.DIVERGENCE.value)
+                monitoring_point = self.project.get_monitoring_point(point.point_id, mt_type)
+        
                 if monitoring_point:
                     monitoring_point.measurement_points.append(point)
 
+                # check if convergence if so also grab point from divergence data and add data
+                if mt_type == MonitoringTypes.CONVERGENCE.value:
+                    monitoring_point = self.project.get_monitoring_point(point.point_id, MonitoringTypes.DIVERGENCE.value)
+                    if monitoring_point:
+                        monitoring_point.measurement_points.append(point)
 
+
+    def checker(self, mt_type, data_line):
+        """checks a data line is good"""
+        checker_types = {'radial displacement':['extract_point_id', 'extract_monitoring_type', 'extract_date_time',
+                                            'extract_distance', 'extract_delta_distance'],
+            'convergence':['extract_point_id', 'extract_monitoring_type', 'extract_date_time',
+                            'extract_distance', 'extract_delta_distance'],
+            'divergence':['extract_point_id', 'extract_monitoring_type', 'extract_date_time',
+                            'extract_distance', 'extract_delta_distance'],
+            'vector': ['extract_point_id', 'extract_monitoring_type', 'extract_date_time',
+                            'extract_distance', 'extract_delta_distance'],
+            '3d point': ['extract_point_id', 'extract_monitoring_type', 'extract_date_time',
+                            'extract_delta_stng', 'extract_delta_l', 'extract_delta_h']
+        }
+
+        checkers = checker_types.get(mt_type)
+        if checkers is None:
+            return False  
+        methods = [getattr(self.extractor, check) for check in checkers]
+        for method in methods:
+            result = method(data_line)
+            if not result:
+                return False 
+        return True 
+    
     def create_measurement_3d_point(self, data_line):
         return Measurement3DPoint(
             self.extractor.extract_point_id(data_line).lower(),

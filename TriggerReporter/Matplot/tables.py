@@ -94,7 +94,7 @@ class MonitoringResultsTable:
         for mp in array.monitoring_points:
             latest_mp = mp.get_measurement_by_date(array_data.date)
             if latest_mp is not None:
-                cell_text.append([latest_mp.point_id, str(latest_mp.date_time), f'{latest_mp.delta_dist:1.1f}'])
+                cell_text.append([latest_mp.point_id.upper(), str(latest_mp.date_time), f'{latest_mp.delta_dist:1.1f}'])
                 colour = self.get_cell_colour(latest_mp.delta_dist, mp.triggers)
                 cell_colours.append([colour,  colour, colour])
             else:
